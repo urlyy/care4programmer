@@ -1,6 +1,8 @@
 
 
 # care4programmer
+期末python大作业的拙作
+
 一个基于mediapipe的使用摄像头进行实时疲劳检测和坐姿检测的提醒小工具<br>
 
 作者: jsu-lyy<br>
