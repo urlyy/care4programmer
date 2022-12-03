@@ -3,3 +3,4 @@ care4programmer.db
 dist
 build
 __pycache__
+main.spec
