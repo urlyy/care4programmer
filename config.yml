@@ -1,0 +1,12 @@
+face_left_eye: [362, 385, 387, 263, 373, 380]
+face_right_eye: [33, 160, 158, 133, 153, 144]
+face_lip: [81, 178, 312, 317, 61, 291]
+
+pose_mouth: [10,9]
+pose_nose: [0]
+pose_eye: [6,3]
+face_cheek: [132,401]
+pose_cheek: [8,7]
+
+pose_shoulder: [12,11]
+finger: [[4, 3, 2], [8, 7, 5], [12, 11, 9], [16, 15, 13], [20, 19, 17]]

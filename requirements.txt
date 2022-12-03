@@ -1,0 +1,4 @@
+mediapipe==0.8.9.1
+opencv_python==4.5.5.64
+PySimpleGUI==4.60.4
+PyYAML==6.0

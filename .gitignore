@@ -1,0 +1,5 @@
+.idea
+care4programmer.db
+dist
+build
+__pycache__
