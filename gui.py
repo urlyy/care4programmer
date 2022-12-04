@@ -347,7 +347,7 @@ class Window:
     '''
 
     def __popup_warning(self, text):
-        sg.Popup(text, keep_on_top=True, modal=True, no_titlebar=True,custom_text=("confirm"))
+        sg.Popup(text, keep_on_top=True, modal=True, no_titlebar=True,custom_text=("OK"))
 
     '''
     蜂鸣警告
