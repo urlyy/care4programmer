@@ -9,7 +9,7 @@ import sqlite3
 
 # 图像化窗口
 class Window:
-    def __init__(self,param):
+    def __init__(self, param):
         # 获取所有可用主题，返回一个列表
         # theme_name_list = sg.theme_list()
         # total = {}
@@ -72,9 +72,9 @@ class Window:
         layout = [
             [sg.Menu(menu_def)],
             [sg.Image(filename='', key='video')],
-            [sg.Text('闭眼值'), sg.Text('', key='ear'), sg.Text('阈值'), sg.Text('', key='ear_threshold'), sg.Text('超时时间'),
+            [sg.Text('闭眼值'), sg.Text('', key='ear'), sg.Text('下阈值'), sg.Text('', key='ear_threshold'), sg.Text('超时时间'),
              sg.Text('', key='close_eye_time_gap')],
-            [sg.Text('张嘴值'), sg.Text('', key='mar'), sg.Text('阈值'), sg.Text('', key='mar_threshold'), sg.Text('超时时间'),
+            [sg.Text('张嘴值'), sg.Text('', key='mar'), sg.Text('上阈值'), sg.Text('', key='mar_threshold'), sg.Text('超时时间'),
              sg.Text('', key='open_mouth_time_gap')],
             [sg.Text('低头抬头值'), sg.Text('', key='up_down_head_val'), sg.Text('上阈值'),
              sg.Text('', key='up_down_head_threshold_up'), sg.Text('下阈值'),
@@ -84,10 +84,10 @@ class Window:
             [sg.Text('歪脖子值'), sg.Text('', key='wryneck_val'), sg.Text('上阈值'), sg.Text('', key='wryneck_threshold_up'),
              sg.Text('下阈值'), sg.Text('', key='wryneck_threshold_down'), sg.Text('超时时间'),
              sg.Text('', key='wryneck_time_gap')],
-            [sg.Text('歪肩膀值'), sg.Text('', key='wryshoulder_val'), sg.Text('阈值'),
-             sg.Text('', key='wryshoulder_threshold_up'), sg.Text('阈值'), sg.Text('', key='wryshoulder_threshold_down'),
+            [sg.Text('歪肩膀值'), sg.Text('', key='wryshoulder_val'), sg.Text('上阈值'),
+             sg.Text('', key='wryshoulder_threshold_up'), sg.Text('下阈值'), sg.Text('', key='wryshoulder_threshold_down'),
              sg.Text('超时时间'), sg.Text('', key='wryshoulder_time_gap')],
-            [sg.Text('侧头值'), sg.Text('', key='lateralize_head_val'), sg.Text('阈值'),
+            [sg.Text('侧头值'), sg.Text('', key='lateralize_head_val'), sg.Text('上阈值'),
              sg.Text('', key='lateralize_head_threshold'), sg.Text('超时时间'),
              sg.Text('', key='lateralize_head_time_gap')],
             [sg.Text('左手手势'), sg.Text('', key='left_hand_val')],
@@ -221,16 +221,16 @@ class Window:
         # 选择了要显示哪些定位点
         if event == 'all_landmarks':
             self.show_landmarks = ['face', 'pose', 'hand']
-            self.window["face_landmarks"].update(visible=False,value=False)
-            self.window["face_mesh_landmarks"].update(visible=False,value=False)
-            self.window["pose_landmarks"].update(visible=False,value=False)
-            self.window["hand_landmarks"].update(visible=False,value=False)
+            self.window["face_landmarks"].update(visible=False, value=False)
+            self.window["face_mesh_landmarks"].update(visible=False, value=False)
+            self.window["pose_landmarks"].update(visible=False, value=False)
+            self.window["hand_landmarks"].update(visible=False, value=False)
         elif event == 'no_landmarks':
             self.show_landmarks = []
-            self.window["face_landmarks"].update(visible=False,value=False)
-            self.window["face_mesh_landmarks"].update(visible=False,value=False)
-            self.window["pose_landmarks"].update(visible=False,value=False)
-            self.window["hand_landmarks"].update(visible=False,value=False)
+            self.window["face_landmarks"].update(visible=False, value=False)
+            self.window["face_mesh_landmarks"].update(visible=False, value=False)
+            self.window["pose_landmarks"].update(visible=False, value=False)
+            self.window["hand_landmarks"].update(visible=False, value=False)
         elif event == 'choose_landmarks':
             self.show_landmarks = []
             self.window["face_landmarks"].update(visible=True)
@@ -300,6 +300,7 @@ class Window:
     '''
     计算帧率并放入图片
     '''
+
     def __put_fps(self, img):
         cur_time = time.time()
         fps = 1 / (cur_time - self.previous_time)
@@ -310,6 +311,7 @@ class Window:
     '''
     根据judger判断的结果，返回警告信息
     '''
+
     def judge_warning(self, data):
         if data.eye_closed:
             return "打起精神！"
@@ -345,7 +347,7 @@ class Window:
     '''
 
     def __popup_warning(self, text):
-        sg.PopupQuick(text, keep_on_top=True, modal=True, non_blocking=True, no_titlebar=True)
+        sg.Popup(text, keep_on_top=True, modal=True, no_titlebar=True,custom_text=("confirm"))
 
     '''
     蜂鸣警告
@@ -394,12 +396,15 @@ class Window:
     '''
     未检测到摄像头时进行弹窗报错
     '''
+
     def remind_camera_not_found(self, param):
         event, values = self.window.read(timeout=0, timeout_key='timeout')
         if event is sg.WIN_CLOSED or event == 'end':
             self.window.close()
             param.is_started = False
         else:
-            sg.PopupQuick("未检测到摄像头", keep_on_top=True, modal=True, non_blocking=True, no_titlebar=True,
-                          background_color="pink", text_color='white')
+            clicked = sg.Popup("未检测到摄像头", keep_on_top=True, modal=True, no_titlebar=True,
+                               background_color="pink", text_color='black', custom_text=("retry", "close"))
+            if clicked == "close":
+                param.is_started = False
         return param
