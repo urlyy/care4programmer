@@ -21,6 +21,7 @@ class Director:
         self.judger = Judger()
 
     def start(self):
+        img, landmarks, _landmarks = None,None,None
         self.param.is_started = True
         # 项目正在进行中
         while self.param.is_started:
@@ -30,7 +31,8 @@ class Director:
                     self.window = Window(self.param)
                     self.param.restart_gui = False
                 # 解析当前图像
-                img, landmarks, _landmarks, self.data = self.observer.observe(self.config, self.param, self.data)
+                if self.param.gui_started == True:
+                    img, landmarks, _landmarks, self.data = self.observer.observe(self.config, self.param, self.data)
             except:
                 # 此处抛异常是未检测到摄像头
                 # 于是进行弹窗提醒
@@ -41,7 +43,8 @@ class Director:
             else:
                 # 正常流程
                 # 先给解析到的结果给judger，得到是否有疲劳、坐姿不正确现象
-                self.data = self.judger.judge(self.param, self.data)
+                if self.param.gui_started == True:
+                    self.data = self.judger.judge(self.param, self.data)
                 # 把数据更新到图形界面上
                 self.param = self.window.update(img, landmarks, _landmarks, self.param, self.data)
                 # 每一帧都重置数据

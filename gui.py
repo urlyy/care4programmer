@@ -106,7 +106,7 @@ class Window:
              sg.Checkbox('姿态', enable_events=True, key="pose_landmarks", size=(10, 1), visible=False),
              sg.Checkbox('手掌', enable_events=True, key="hand_landmarks", size=(10, 1), visible=False)],
             # [sg.Checkbox('开启疲劳检测',default=True), sg.Checkbox('开启坐姿检测',default=True)],
-            [sg.Button('开始', size=(10, 1), key="stop_continue_btn"), sg.Button('结束', size=(10, 1), key="end")]
+            [sg.Button('开启摄像头', size=(10, 1), key="stop_continue_btn"), sg.Button('结束', size=(10, 1), key="end")]
         ]
         '''
         窗口设计
@@ -144,9 +144,10 @@ class Window:
             return param
         # 点了开始暂停继续按钮
         if event == "stop_continue_btn":
-            if self.window["stop_continue_btn"].ButtonText == "开始":
+            if self.window["stop_continue_btn"].ButtonText == "开启摄像头":
                 param.gui_started = True
                 self.window["stop_continue_btn"].update(text="暂停")
+                return param
             elif self.window["stop_continue_btn"].ButtonText == "暂停":
                 param.gui_started = False
                 self.window["stop_continue_btn"].update(text="继续")
@@ -171,7 +172,7 @@ class Window:
             self.warning_mode = 'popup_warning'
         #
         # if param.gui_started == None:
-        #     self.window["stop_continue_btn"].update(text="开始")
+        #     self.window["stop_continue_btn"].update(text="开启摄像头")
         # 图形化界面更新ing
         if param.gui_started == True:
             # 获得处理后的图像并展示在界面上
