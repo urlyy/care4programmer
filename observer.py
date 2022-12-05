@@ -238,7 +238,6 @@ class Observer:
 
     def observe(self, config, param, data):
         if self.cap.isOpened():
-            print("开始了")
             # 读取一帧与识别
             success, img = self.cap.read()
 

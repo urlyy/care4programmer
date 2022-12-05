@@ -46,7 +46,7 @@ class Director:
                 if self.param.gui_started == True:
                     self.data = self.judger.judge(self.param, self.data)
                 # 把数据更新到图形界面上
-                self.param = self.window.update(img, landmarks, _landmarks, self.param, self.data)
+                self.param = self.window.update(img,  _landmarks, self.param, self.data)
                 # 每一帧都重置数据
                 self.data.clear()
         print("结束")
@@ -77,7 +77,7 @@ class Param:
         ## 闭眼
         self.close_eye_time_gap = 3
         self.close_eye_last_time = None
-        self.close_eye_threshold = 0.18
+        self.close_eye_threshold = 0.2
         ## 打哈欠
         self.open_mouth_threshold = 0.50
         self.open_mouth_time_gap = 1
@@ -97,9 +97,9 @@ class Param:
         self.wryneck_time_gap = 1
         self.wryneck_last_time = None
         ## 歪肩膀
-        self.wryshoulder_threshold_up = 15
-        self.wryshoulder_threshold_down = -15
-        self.wryshoulder_time_gap = 1
+        self.wryshoulder_threshold_up = 40
+        self.wryshoulder_threshold_down = -40
+        self.wryshoulder_time_gap = 3
         self.wryshoulder_last_time = None
         # 侧头
         self.lateralize_head_threshold = 45

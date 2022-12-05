@@ -24,9 +24,8 @@ class Window:
         #     asdf.append(key)
         #     asdf.append(value)
         # print(asdf)
-        '''
+
         # 主题
-        '''
         theme = self.__get_theme()
         if theme is None:
             sg.theme('Default1')
@@ -72,7 +71,7 @@ class Window:
         layout = [
             [sg.Menu(menu_def)],
             [sg.Image(filename='', key='video')],
-            [sg.Text('闭眼值'), sg.Text('', key='ear'), sg.Text('下阈值'), sg.Text('', key='ear_threshold'), sg.Text('超时时间'),
+            [sg.Text('闭眼值(眼镜反光会影响计算)'), sg.Text('', key='ear'), sg.Text('下阈值'), sg.Text('', key='ear_threshold'), sg.Text('超时时间'),
              sg.Text('', key='close_eye_time_gap')],
             [sg.Text('张嘴值'), sg.Text('', key='mar'), sg.Text('上阈值'), sg.Text('', key='mar_threshold'), sg.Text('超时时间'),
              sg.Text('', key='open_mouth_time_gap')],
@@ -124,17 +123,18 @@ class Window:
         self.mp_holistic = mp.solutions.holistic
         self.show_landmarks = []
         self.warning_mode = "no_warning"
+        self.draw_spec = self.mp_drawing.DrawingSpec(thickness=1, circle_radius=2, color=(243, 249, 32))
         '''
         重新加载主题后还要更改暂停继续按钮的初始值为暂停
         '''
-        if param.gui_started == True:
+        if param.gui_started:
             self.window["stop_continue_btn"].update(text="暂停")
 
     '''
     每一帧更新界面数据
     '''
 
-    def update(self, img, landmarks, _landmarks, param, data):
+    def update(self, img, _landmarks, param, data):
         # 获取事件
         event, values = self.window.read(timeout=0, timeout_key='no event')
         # 点了叉或结束按钮
@@ -174,16 +174,16 @@ class Window:
         # if param.gui_started == None:
         #     self.window["stop_continue_btn"].update(text="开启摄像头")
         # 图形化界面更新ing
-        if param.gui_started == True:
+        if param.gui_started:
             # 获得处理后的图像并展示在界面上
-            img = self.__process_img(img, landmarks, _landmarks, param, data, event, values)
+            img = self.__process_img(img, _landmarks, param, data, event)
             self.window["video"].update(data=cv2.imencode('.png', img)[1].tobytes())
             # 依据judger判断后的结果和警告模式进行警告
             self.warn(data)
         return param
 
     # 处理图像
-    def __process_img(self, img, landmarks, _landmarks, param, data, event, values):
+    def __process_img(self, img, _landmarks, param, data, event):
         # 显示各参数值
         # 闭眼值
         self.window["ear"].update(round(data.ear * 10, 2))
@@ -281,7 +281,7 @@ class Window:
         if 'face' in self.show_landmarks:
             if _landmarks['face']:
                 self.mp_drawing.draw_landmarks(img, _landmarks['face'], self.mp_holistic.FACEMESH_CONTOURS,
-                                               landmark_drawing_spec=None,
+                                               landmark_drawing_spec=self.draw_spec,
                                                connection_drawing_spec=self.mp_drawing_styles.get_default_face_mesh_contours_style())
         if 'face_mesh' in self.show_landmarks:
             if _landmarks['face']:
@@ -348,7 +348,7 @@ class Window:
     '''
 
     def __popup_warning(self, text):
-        sg.Popup(text, keep_on_top=True, modal=True, no_titlebar=True,custom_text=("OK"))
+        sg.PopupOK(text, keep_on_top=True, modal=True, no_titlebar=True)
 
     '''
     蜂鸣警告
