@@ -8,6 +8,12 @@
 作者: jsu-lyy<br>
 
 <a href="https://github.com/AnWAmaster/care4programmer">仓库地址</a>
+# 环境
+python=3.8.5<br>
+mediapipe==0.8.9.1<br>
+opencv_python==4.5.5.64<br>
+PySimpleGUI==4.60.4<br>
+PyYAML==6.0<br>
 
 # 打包方式
 1. `pip install pyinstaller`
